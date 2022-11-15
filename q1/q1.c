@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
     if (errno != 0 || *p != '\0' || conv > INT_MAX || conv < INT_MIN) {
         printf("usage: samples file numberfrags (n) maxfragsize \n");
         printf("ERROR: input for n is invalid\n");
+        return EXIT_FAILURE;
     } else {
         n = conv;
     }
@@ -36,6 +37,7 @@ int main(int argc, char* argv[]) {
     if (errno != 0 || *p != '\0' || conv > INT_MAX || conv < INT_MIN) {
         printf("usage: samples file numberfrags (n) maxfragsize \n");
         printf("ERROR: input for m is invalid\n");
+        return EXIT_FAILURE;
     } else {
         m = conv;
     }
@@ -44,6 +46,10 @@ int main(int argc, char* argv[]) {
     output[0] = '>'; output[m+1] = '<'; output[m+2] = 0;
 
     file = fopen(argv[1], "r");
+    if (file == NULL) {
+        printf("ERROR: %s could not be opened\n", argv[1]);
+        return EXIT_FAILURE;
+    }
     fseek(file, 0, SEEK_END);
     bound = ftell(file) - m;
 
@@ -63,5 +69,5 @@ int main(int argc, char* argv[]) {
     }
  
     fclose(file);
-    return 0;
+    return EXIT_SUCCESS;
 }

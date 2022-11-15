@@ -15,11 +15,10 @@
 * @param filename is the file being converted
 */
 int fork_n_execute(const char *command, const char *filename) {
-    int status = 0;
     pid_t pid;
 
     if (command == NULL)
-        status = -1;
+        return EXIT_FAILURE;
 
     pid = fork();
 
@@ -36,10 +35,10 @@ int fork_n_execute(const char *command, const char *filename) {
     
     else {
         printf("ERROR: Unable to create child process.\n");
-        status = -1;
+        return EXIT_FAILURE;
     }
     
-    return status;
+    return EXIT_SUCCESS;
 }
 /*
 * Creates the command to execute pandoc in shell
@@ -79,7 +78,8 @@ char* call_pandoc(char *filename) {
 *@param n - number of files to add to the zip
 */
 int zip_files(char** files, const int n){
-    if (files == NULL) return -1;
+    if (files == NULL) 
+        return EXIT_FAILURE;
 
     /* Allocates space for the zip call (len("zip ebooks.zip "") = 14) */
     char* command = malloc(sizeof(char) * 14);
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
     char* command;
     char* files[argc - 1];
     if (argc <= 1) {
-        printf("usage: pandoc file1 (file2) (file3) (...)\n");
+        printf("usage: txt2epub file1 (file2) (file3) (...)\n");
         return -1;
     }
 
