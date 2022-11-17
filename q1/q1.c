@@ -42,7 +42,8 @@ int main(int argc, char* argv[]) {
         m = conv;
     }
 
-    char output[m+2], c;
+    char* output = malloc(sizeof(char) * m + 2);
+    char c;
     output[0] = '>'; output[m+1] = '<'; output[m+2] = 0;
 
     file = fopen(argv[1], "r");
@@ -67,7 +68,8 @@ int main(int argc, char* argv[]) {
         }
         printf("%s \n", output);
     }
- 
+
     fclose(file);
+    free(output);
     return EXIT_SUCCESS;
 }
