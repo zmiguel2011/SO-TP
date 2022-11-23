@@ -59,6 +59,7 @@ int main(int argc, char* argv[]) {
                 fileDescriptorWrite = open(pipeNames[y], O_WRONLY);
             }
             int number, size = 1;
+            sleep(1);
             while((size = read(fileDescriptorRead, &number, sizeof(int))) > 0){
                 if(random() % 100 < p * 100){
                     printf("lock on token (val = %d)\n", number);
@@ -68,7 +69,6 @@ int main(int argc, char* argv[]) {
                 number++;
                 write(fileDescriptorWrite, &number, sizeof(int));
             }
-            printf("reached this %d\n", y);
             return 0;
         }
     }
