@@ -10,18 +10,27 @@
 
 #define MAX_SIZE 256
 
-//creates pipes
-int create_pipes(char n){
-    char name[] = "pipextoy";
-    for(int i = 1; i < n - '0'; i++){
-        name[4] = i + '0';
-        name[7] = (i + 1) + '0';
-        mkfifo(name, 0777);
+//create 1 pipe
+const char* makePipe(int x, int n){
+    char *result = malloc (sizeof (char) * 26);
+    if(x == n){
+        sprintf(result, "pipe%dto%d", x, 1);   
     }
-    name[4] = n;
-    name[7] = '1';
-    mkfifo(name, 0777);
-    return 0;
+    else{
+    sprintf(result, "pipe%dto%d", x, x+1);
+    }
+    mkfifo(result, 0777);
+    return result;
+}
+
+//creates pipes returns array of names
+const char** create_pipes(int n){
+    const char **pipeNames;
+    pipeNames = malloc(n * sizeof(char*));
+    for(int i = 1; i <= n; i++){
+        pipeNames[i-1] = makePipe(i, n);
+    }
+    return pipeNames;
 }
 
 //n->número de processos p->probabilidade de esperar t->tempo de espera
@@ -32,54 +41,41 @@ int main(int argc, char* argv[]) {
     }
     float p = atof(argv[2]);
     int n = atoi(argv[1]);
-    create_pipes(*argv[1]);
+    const char** pipeNames = create_pipes(n);
     pid_t pid;
-    for(int y = 1; y <= *argv[1] - '0'; y++){
+    for(int y = 1; y <= n; y++){
         pid_t pid1 = fork();
         pid = pid1;
         if(pid == 0){
             srandom(y);
-            char pipeToRead[] = "pipextoy";
-            char pipeToWrite[] = "pipextoy";
-            if(y == *argv[1] - '0'){
-                pipeToWrite[4] = y + '0';
-                pipeToWrite[7] = '1';
-                pipeToRead[4] = (y - 1) + '0';
-                pipeToRead[7] = y + '0';
+            int fileDescriptorRead;
+            int fileDescriptorWrite;
+            if(y == n){
+                fileDescriptorRead = open(pipeNames[y-1], O_RDONLY);
+                fileDescriptorWrite = open(pipeNames[0], O_WRONLY);
             }
             else{
-                pipeToWrite[4] = y + '0';
-                pipeToWrite[7] = (y +1) + '0';
-                if(y == 1){
-                    pipeToRead[4] = *argv[1];
-                    pipeToRead[7] = 1 + '0';
+                fileDescriptorRead = open(pipeNames[y-1], O_RDONLY);
+                fileDescriptorWrite = open(pipeNames[y], O_WRONLY);
+            }
+            int number, size = 1;
+            while((size = read(fileDescriptorRead, &number, sizeof(int))) > 0){
+                if(random() % 100 < p * 100){
+                    printf("lock on token (val = %d) %d\n", number, y);
+                    sleep(*argv[3] - '0');
+                    printf("unlock token\n");
                 }
-                else{
-                    pipeToRead[4] = (y - 1) + '0';
-                    pipeToRead[7] = y + '0';
-                }   
+                number++;
+                write(fileDescriptorWrite, &number, sizeof(int));
             }
-        int fileDescriptorRead = open(pipeToRead, O_RDONLY);
-        int fileDescriptorWrite = open(pipeToWrite, O_WRONLY);
-        int number, size = 1;
-        sleep(1);
-        while((size = read(fileDescriptorRead, &number, sizeof(int))) > 0){
-            if(random() % 100 < p * 100){
-                printf("lock on token (val = %d)\n", number);
-                sleep(*argv[3] - '0');
-                printf("unlock token\n");
-            }
-            number++;
-            write(fileDescriptorWrite, &number, sizeof(int));
+            printf("reached this %d\n", y);
+            return 0;
         }
-        printf("reached this %d\n", y);
-        return 0;
     }
-}
-int fileDescriptor = open("pipe1to2", O_WRONLY); 
-int first = 0;
-write(fileDescriptor, &first, sizeof(int));
-close(fileDescriptor);
-wait(NULL);
-return 0;
+    int fileDescriptor = open("pipe1to2", O_WRONLY); 
+    int first = 0;
+    write(fileDescriptor, &first, sizeof(int));
+    close(fileDescriptor);
+    wait(NULL);
+    return 0;
 }
