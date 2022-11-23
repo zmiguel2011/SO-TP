@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
             int number, size = 1;
             while((size = read(fileDescriptorRead, &number, sizeof(int))) > 0){
                 if(random() % 100 < p * 100){
-                    printf("lock on token (val = %d) %d\n", number, y);
+                    printf("lock on token (val = %d)\n", number);
                     sleep(*argv[3] - '0');
                     printf("unlock token\n");
                 }
