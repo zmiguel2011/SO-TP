@@ -69,6 +69,8 @@ int main(int argc, char* argv[]) {
                 number++;
                 write(fileDescriptorWrite, &number, sizeof(int));
             }
+            close(fileDescriptorRead);
+            close(fileDescriptorWrite);
             return 0;
         }
     }
