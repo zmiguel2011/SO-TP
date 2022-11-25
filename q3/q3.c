@@ -7,6 +7,7 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>
 
 #define MAX_SIZE 256
 
@@ -47,7 +48,7 @@ int main(int argc, char* argv[]) {
         pid_t pid1 = fork();
         pid = pid1;
         if(pid == 0){
-            srandom(y);
+            srandom(time(0)*y);
             int fileDescriptorRead;
             int fileDescriptorWrite;
             if(y == n){
@@ -58,8 +59,8 @@ int main(int argc, char* argv[]) {
                 fileDescriptorRead = open(pipeNames[y-1], O_RDONLY);
                 fileDescriptorWrite = open(pipeNames[y], O_WRONLY);
             }
-            int number, size = 1;
             sleep(1);
+            int number, size = 1;
             while((size = read(fileDescriptorRead, &number, sizeof(int))) > 0){
                 if(random() % 100 < p * 100){
                     printf("lock on token (val = %d)\n", number);
