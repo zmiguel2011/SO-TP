@@ -9,3 +9,4 @@ $(EXEC): $(OBJS)
 .PHONY : clean
 clean :
 	-rm $(OBJS) $(EXEC)
+	-rm -rf pipe*
