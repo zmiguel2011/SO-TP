@@ -80,5 +80,8 @@ int main(int argc, char* argv[]) {
     write(fileDescriptor, &first, sizeof(int));
     close(fileDescriptor);
     wait(NULL);
+    for(int i = 0; i < n; i++) 
+        free(pipeNames[i]);
+    free(pipeNames);
     return 0;
 }
