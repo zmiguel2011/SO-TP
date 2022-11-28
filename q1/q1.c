@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     long conv = strtol(argv[2], &p, 10);
 
     // Check for errors: e.g., the string does not represent an integer
-    // or the integer is larger than int
+    // or the integer is larger than INT_MAX or smaller than INT_MIN
     // then saves the numberfrags in n
     if (errno != 0 || *p != '\0' || conv > INT_MAX || conv < INT_MIN) {
         printf("usage: samples file numberfrags (n) maxfragsize \n");
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
     conv = strtol(argv[3], &p, 10);
 
     // Check for errors: e.g., the string does not represent an integer
-    // or the integer is larger than int
+    // or the integer is larger than INT_MAX or smaller than INT_MIN
     // then saves the maxfragsize in m
     if (errno != 0 || *p != '\0' || conv > INT_MAX || conv < INT_MIN) {
         printf("usage: samples file numberfrags (n) maxfragsize \n");
