@@ -81,8 +81,8 @@ int zip_files(char** files, const int n){
     if (files == NULL) 
         return EXIT_FAILURE;
 
-    /* Allocates space for the zip call (len("zip ebooks.zip "") = 14) */
-    char* command = malloc(sizeof(char) * 14);
+    /* Allocates space for the zip call (len("zip ebooks.zip "") = 14 + 1 = 15) */
+    char* command = malloc(sizeof(char) * 15);
     strcpy(command, "zip ebooks.zip");
     for (int i = 0; i < n; i++) {
         command = realloc(command, strlen(command) + sizeof(char) * (strlen(files[i]) + 1));

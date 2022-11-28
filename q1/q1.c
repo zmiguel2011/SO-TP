@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     long bound;
 
     if (argc <= 3) {
-        printf("usage: samples file numberfrags maxfragsize\n");
+        printf("usage: samples file n (numberfrags) m (maxfragsize)\n");
         return -1;
     }
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     // or the integer is larger than INT_MAX or smaller than INT_MIN
     // then saves the numberfrags in n
     if (errno != 0 || *p != '\0' || conv > INT_MAX || conv < INT_MIN) {
-        printf("usage: samples file numberfrags (n) maxfragsize \n");
+        printf("usage: samples file n (numberfrags) m (maxfragsize)\n");
         printf("ERROR: input for n is invalid\n");
         return EXIT_FAILURE;
     } else {
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     // or the integer is larger than INT_MAX or smaller than INT_MIN
     // then saves the maxfragsize in m
     if (errno != 0 || *p != '\0' || conv > INT_MAX || conv < INT_MIN) {
-        printf("usage: samples file numberfrags (n) maxfragsize \n");
+        printf("usage: samples file n (numberfrags) m (maxfragsize)\n");
         printf("ERROR: input for m is invalid\n");
         return EXIT_FAILURE;
     } else {

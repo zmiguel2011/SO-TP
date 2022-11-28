@@ -11,7 +11,7 @@
 #include <limits.h>
 #include <signal.h>
 
-#define MAX_PIPE_NAME 26            // Longest pipename, for the biggest N values, for N <= INT_MAX in pipeXtoY, X,Y <= N
+#define MAX_PIPE_NAME 27            // Longest pipename, for the biggest N values, for N <= INT_MAX in pipeXtoY, X,Y <= N
 
 typedef enum {false = 0, true = 1} bool;
 bool keepAtIt = true;
