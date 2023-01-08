@@ -7,4 +7,4 @@
 - André Dantas Rodrigues - up202108721
 - João Couto - up202006526
 
-## Final Grade: **5.8**/6.0
+## Final Grade: 5.8/6.0
